@@ -17,7 +17,7 @@ shinyServer(function(input, output, session) {
   })
 
   data <- reactive({
-      mapas <- lapply(setNames(input$grupos, input$grupos), function(x) get_raw_geojson("son0p/apariciones_proyectos_musicales",x))
+      mapas <- lapply(setNames(input$grupos, input$grupos), function(x) get_raw_geojson("daquina-io/apariciones_proyectos_musicales",x))
       flatten_data <- flat_data(mapas)
       colnames(flatten_data) <- normalizarNombre(colnames(flatten_data))
       flatten_data
