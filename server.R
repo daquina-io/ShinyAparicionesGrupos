@@ -10,6 +10,9 @@ library(leaflet)
 library(RColorBrewer)
 source("./utils.R")
 
+# https://github.com/SocialFunction/youTubeDataR
+# devtools::install_github("SocialFunction/youTubeDataR")
+
 shinyServer(function(input, output, session) {
 
   output$grupos <- renderPrint({
@@ -20,6 +23,7 @@ shinyServer(function(input, output, session) {
       mapas <- lapply(setNames(input$grupos, input$grupos), function(x) get_raw_geojson("daquina-io/apariciones_proyectos_musicales",x))
       flatten_data <- flat_data(mapas)
       colnames(flatten_data) <- normalizarNombre(colnames(flatten_data))
+      flatten_data$Date <- normalizar_fecha(flatten_data$Date)
       flatten_data
   })
 
@@ -29,13 +33,13 @@ shinyServer(function(input, output, session) {
     }))
 
   output$apariciones_bubbles <- renderPlotly({
-      b <- ggplot(data(), aes(x = ymd(Date), y = as.numeric(Capacity), size = Capacity, colour = Id)) + geom_point(stat = "identity") + xlab("Fecha") + ylab("Capacidad") + labs(title = "Apariciones")
+      b <- ggplot(data(), aes(x = Date, y = as.numeric(Capacity), size = Capacity, colour = Id)) + geom_point(stat = "identity") + xlab("Fecha") + ylab("Capacidad") + labs(title = "Apariciones")
 b
       (gg <- ggplotly(b))
   })
 
   output$apariciones_tendencia <- renderPlot({
-      b <- ggplot(data(), aes(x = ymd(Date), y = as.numeric(Capacity))) + geom_smooth(method = "loess", formula = y ~ x, span = 0.4) + geom_point() + xlab("Fecha") + ylab("Capacidad") + labs(title = "Apariciones") + facet_wrap("Id")
+      b <- ggplot(data(), aes(x = Date, y = as.numeric(Capacity))) + geom_smooth(method = "loess", formula = y ~ x, span = 0.4) + geom_point() + xlab("Fecha") + ylab("Capacidad") + labs(title = "Apariciones") + facet_wrap("Id")
       b
       #(gg <- ggplotly(b))
   })
