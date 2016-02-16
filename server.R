@@ -10,6 +10,9 @@ library(leaflet)
 library(RColorBrewer)
 source("./utils.R")
 
+# https://github.com/SocialFunction/youTubeDataR
+# devtools::install_github("SocialFunction/youTubeDataR")
+
 shinyServer(function(input, output, session) {
 
   output$grupos <- renderPrint({
@@ -20,6 +23,7 @@ shinyServer(function(input, output, session) {
       mapas <- lapply(setNames(input$grupos, input$grupos), function(x) get_raw_geojson("daquina-io/apariciones_proyectos_musicales",x))
       flatten_data <- flat_data(mapas)
       colnames(flatten_data) <- normalizarNombre(colnames(flatten_data))
+      flatten_data$Date <- normalizar_fecha(flatten_data$Date)
       flatten_data
   })
 
