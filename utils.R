@@ -20,7 +20,14 @@ flat_data <- function(mapas) {
     flatten_geometry <- ldply(flatten_geometry, cbind)  # Uno la lista de cada grupo en una sola
     flatten_geometry <- data.frame(matrix(unlist(flatten_geometry$coordinates), nrow=length(flatten_geometry$coordinates), byrow=TRUE)) # La línea de arriba es sacada de acá http://www.r-bloggers.com/converting-a-list-to-a-data-frame/ Para convertir una lista en un data.frame
     colnames(flatten_geometry) <- c("x","y")
-    cbind2(flatten_features, flatten_geometry) # Combino las features con las geometrías de cada grupo (solo soporta puntos)
+    flatten_data <- cbind2(flatten_features, flatten_geometry) # Combino las features con las geometrías de cada grupo (solo soporta puntos)
+}
+
+normalizar_fecha <- function(flatten_data_date) {
+    tmp_date <- flatten_data_date
+    flatten_data_date <- ymd(flatten_data_date)
+    flatten_data_date[which(is.na(flatten_data_date))] <- ymd_hms(tmp_date[which(is.na(flatten_data_date))])
+    flatten_data_date
 }
 
 open_in_excel <- function(some_df){
