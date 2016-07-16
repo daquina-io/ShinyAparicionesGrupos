@@ -1,6 +1,6 @@
 library(rMaps)
 library(RJSONIO)
-source("../utils.R")
+source("../utils.R") # no sé como apuntar a esta ruta, me toca traer una copia en local
 L2 <- Leaflet$new()
 L2$setView(c(29.7632836, -95.3632715), 10)
 # ERROR: MapQuestOpen cambio sus políticas de uso, hay una alternativa?
