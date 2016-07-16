@@ -1,4 +1,6 @@
 library(rMaps)
+library(RJSONIO)
+source("../utils.R")
 L2 <- Leaflet$new()
 L2$setView(c(29.7632836, -95.3632715), 10)
 # ERROR: MapQuestOpen cambio sus políticas de uso, hay una alternativa?
@@ -16,13 +18,10 @@ cat(rjson::toJSON(crime_dat[1:2]))
 # [[27.5071143,-99.5055471,1],[29.4836146,-95.0618715,10]]
 
 # ------- datos fonseca --------------
-# TODO: extraer los campos lat, log y capacity de este geoJson : https://github.com/daquina-io/apariciones/blob/master/fonseca.geojson))
-
-# require("geojsonio")  # ERROR: esto no me instala
-
-# ERROR: pésimo intento de asignar a una variable  dos geolocalizaciones con valores 1 y 10 
-#fonsecaData <- array(([[27.5071143,-99.5055471,1],[29.4836146,-95.0618715,10]]), dim=c(1,1,2))
-
+# TODO: extraer los campos lat, log y capacity de este geoJson : https://github.com/daquina-io/apariciones/blob/master/fonseca.geojson)) y que quede formateados así:
+# [[27.5071143,-99.5055471,1],[29.4836146,-95.0618715,10]]
+geojson <- fromJSON("https://raw.githubusercontent.com/daquina-io/apariciones/master/fonseca.geojson")
+geojson
 
 # Add leaflet-heat plugin. Thanks to Vladimir Agafonkin
 L2$addAssets(jshead = c(
