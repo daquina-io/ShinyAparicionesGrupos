@@ -1,6 +1,6 @@
 library(rMaps)
 library(RJSONIO)
-source("../utils.R") # no sé como apuntar a esta ruta, me toca traer una copia en local
+#source("../utils.R") # no sé como apuntar a esta ruta, me toca traer una copia en local
 L2 <- Leaflet$new()
 L2$setView(c(29.7632836, -95.3632715), 10)
 # ERROR: MapQuestOpen cambio sus políticas de uso, hay una alternativa?
@@ -22,6 +22,9 @@ cat(rjson::toJSON(crime_dat[1:2]))
 # [[27.5071143,-99.5055471,1],[29.4836146,-95.0618715,10]]
 geojson <- fromJSON("https://raw.githubusercontent.com/daquina-io/apariciones/master/fonseca.geojson")
 geojson
+
+# ERROR:  Error in x[["features"]] (from #1) : subscript out of bounds
+#flatten_geometry <- lapply(geojson, function(x) x[['features']][['geometry']]['coordinates'])
 
 # Add leaflet-heat plugin. Thanks to Vladimir Agafonkin
 L2$addAssets(jshead = c(
