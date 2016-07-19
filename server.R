@@ -33,6 +33,7 @@ shinyServer(function(input, output, session) {
     }))
 
   output$apariciones_bubbles <- renderPlotly({
+
       b <- ggplot(data(), aes(x = Date, y = as.numeric(Capacity), size = Capacity, colour = Id)) + geom_point(stat = "identity") + xlab("Fecha") + ylab("Capacidad") + labs(title = "Apariciones")
 b
       (gg <- ggplotly(b))
