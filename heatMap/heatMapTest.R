@@ -5,8 +5,18 @@ library(RJSONIO)
 library(jsonlite)
 ##source("../utils.R") # no sé como apuntar a esta ruta, me toca traer una copia en local
 geojson <- jsonlite::fromJSON("https://raw.githubusercontent.com/daquina-io/apariciones/master/fonseca.geojson")
+geojson
 str(geojson)
 coordinates <- matrix(unlist(geojson$features$geometry$coordinates), ncol = 2, byrow = TRUE)
+coordinates
+coordinates2 <- coordinates[,c(2,1)] # invierte lat y long
+coordinates2
+
+capacity <- matrix(unlist(geojson$features$properties$capacity), ncol = 1, byrow = TRUE)
+capacity
+
+coordinatesCapacity <- cbind(coordinates2,capacity)
+coordinatesCapacity
 
 L2 <- Leaflet$new()
 L2$setView(c(4.657699484508704, -74.09591674804688 ), 5)
@@ -58,12 +68,13 @@ addressPoints <- apply(
   ,as.numeric
 )
 
-addressPoints <- data.frame( addressPoints )
+# addressPoints <- data.frame( addressPoints )
+addressPoints <- data.frame( coordinatesCapacity  )
 colnames( addressPoints ) <- c( "lat", "lng", "value" )
 
 # create our heatmap
 leaf <- leaflet( addressPoints ) %>%
-  setView( 175.475,-37.87, 12 ) %>%
+  setView( 4.657699484508704, -74.09591674804688 , 5 ) %>%
   addHeatmap(intensity=~value )
 
 leaf
@@ -71,20 +82,21 @@ leaf
 # or create a dot map-like heatmap
 # create our heatmap
 leaflet( addressPoints ) %>% addTiles() %>%
-  setView( 175.475,-37.87, 12 ) %>%
+  setView( 4.657699484508704, -74.09591674804688 , 5 ) %>%
   addHeatmap(intensity=~value, radius = 2, blur = 1,
              max = 1e-10, gradient = blues9[8:9] )
 
 # customize our heatmap with options
 leaf <- leaflet() %>%
   addTiles() %>%
-  setView( 175.475,-37.87, 12 ) %>%
+  setView( 4.657699484508704, -74.09591674804688 , 5 ) %>%
   addHeatmap(
     data = addressPoints,
     intensity = ~value,
     blur = 50,
     gradient = "Purples"
   )
+
 
 leaf
 
