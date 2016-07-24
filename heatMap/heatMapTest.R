@@ -3,32 +3,25 @@
 library(rMaps)
 library(RJSONIO)
 library(jsonlite)
-##source("../utils.R") # no sé como apuntar a esta ruta, me toca traer una copia en local
+# trae los datos
 geojson <- jsonlite::fromJSON("https://raw.githubusercontent.com/daquina-io/apariciones/master/fonseca.geojson")
-geojson
 str(geojson)
+# extrae latitud y longitud
 coordinates <- matrix(unlist(geojson$features$geometry$coordinates), ncol = 2, byrow = TRUE)
-coordinates
-coordinates2 <- coordinates[,c(2,1)] # invierte lat y long
-coordinates2
-
+ # invierte lat y long
+coordinates2 <- coordinates[,c(2,1)]
+# extrae capacity
 capacity <- matrix(unlist(geojson$features$properties$capacity), ncol = 1, byrow = TRUE)
-capacity
-
+capacity <- as.numeric(capacity)
+# une lat long y capacity
 coordinatesCapacity <- cbind(coordinates2,capacity)
-coordinatesCapacity
-
+# inicia Leaflet
 L2 <- Leaflet$new()
 L2$setView(c(4.657699484508704, -74.09591674804688 ), 5)
-# ERROR: MapQuestOpen cambio sus políticas de uso, hay una alternativa?
-L2
-
 # Add leaflet-heat plugin. Thanks to Vladimir Agafonkin
 L2$addAssets(jshead = c(
   "http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"
 ))
-
-
 # Add javascript to modify underlying chart
 L2$setTemplate(afterScript = sprintf("
 <script>
@@ -37,8 +30,37 @@ L2$setTemplate(afterScript = sprintf("
 </script>
 ", coordinates
 ))
-
 L2
+ # adaptación de ejemplo http://www.d3noob.org/2014/02/generate-heatmap-with-leafletheat-and.html
+addressPoints <- data.frame( coordinatesCapacity  )
+colnames( addressPoints ) <- c( "lat", "lng", "value" )
+
+earthquakes = data.frame( addressPoints  )
+leaflet( earthquakes ) %>%
+  addTiles() %>%
+  setView( -74.5546,4.646, 5 ) %>%
+  addHeatmap(
+    lat = ~lat,
+    lng = ~lng,
+    intensity = ~value,
+    radius = 20,
+    blur = 15,
+    maxZoom = 17
+  )
+
+#  using data(quakes)
+data(quakes)
+
+leaflet(quakes) %>%
+  addTiles( ) %>%
+  setView( 178, -20, 5 ) %>%
+  addHeatmap( lng = ~long, intensity = ~mag,
+              blur = 20, max = 0.02, radius = 10,
+             gradient = "Greys" )
+
+leaflet()
+
+
 ##################################################################################################
 ################ https://github.com/rstudio/leaflet/pull/174 #####################################
 ##################################################################################################
@@ -68,7 +90,7 @@ addressPoints <- apply(
   ,as.numeric
 )
 
-# addressPoints <- data.frame( addressPoints )
+ addressPoints <- data.frame( addressPoints )
 addressPoints <- data.frame( coordinatesCapacity  )
 colnames( addressPoints ) <- c( "lat", "lng", "value" )
 
@@ -119,7 +141,7 @@ earthquakes <- apply(
   ,as.numeric
 )
 
-earthquakes = data.frame( earthquakes )
+earthquakes = data.frame( addressPoints  )
 leaflet( earthquakes ) %>%
   addTiles() %>%
   setView( 174.146, -41.5546, 10 ) %>%
@@ -140,7 +162,9 @@ leaflet(quakes) %>%
   setView( 178, -20, 5 ) %>%
   addHeatmap( lng = ~long, intensity = ~mag,
               blur = 20, max = 0.02, radius = 10,
-              gradient = "Greys" )
+             gradient = "Greys" )
+
+leaflet()
 
 # to remove the heatmap
 leaf %>% clearHeatmap()
