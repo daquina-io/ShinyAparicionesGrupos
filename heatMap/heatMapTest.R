@@ -1,7 +1,6 @@
 ##library(devtools)
 ##install_github("ramnathv/rCharts@dev")
 library(rMaps)
-library(RJSONIO)
 library(jsonlite)
 # trae los datos
 geojson <- jsonlite::fromJSON("https://raw.githubusercontent.com/daquina-io/apariciones/master/fonseca.geojson")
@@ -35,14 +34,18 @@ L2
 addressPoints <- data.frame( coordinatesCapacity  )
 colnames( addressPoints ) <- c( "lat", "lng", "value" )
 
-earthquakes = data.frame( addressPoints  )
-leaflet( earthquakes ) %>%
+maximo <- max(addressPoints$value)
+minimo <- min(addressPoints$value)
+
+factor_pondera <- 4
+
+leaflet( addressPoints ) %>%
   addTiles() %>%
   setView( -74.5546,4.646, 5 ) %>%
   addHeatmap(
     lat = ~lat,
     lng = ~lng,
-    intensity = ~value,
+    intensity = ~value*factor_pondera/(maximo-minimo),
     radius = 20,
     blur = 15,
     maxZoom = 17
@@ -90,7 +93,7 @@ addressPoints <- apply(
   ,as.numeric
 )
 
- addressPoints <- data.frame( addressPoints )
+addressPoints <- data.frame( addressPoints )
 addressPoints <- data.frame( coordinatesCapacity  )
 colnames( addressPoints ) <- c( "lat", "lng", "value" )
 
