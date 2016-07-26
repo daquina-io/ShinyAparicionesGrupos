@@ -1,9 +1,13 @@
+##if (!require("devtools"))
+##  install.packages("devtools")
+##devtools::install_github("rstudio/shiny")
 library(shiny)
 library(jsonlite)
 library(plyr)
 library(stringr)
 library(stringi)
 library(ggplot2)
+## devtools::install_github("ropensci/plotly")
 library(plotly)
 library(lubridate)
 library(leaflet)
@@ -49,10 +53,23 @@ b
       df <- data()
       grupos_seleccionados <- unique(df$Id)
       factpal <- colorFactor(topo.colors(length(grupos_seleccionados)), grupos_seleccionados)
+      factor_pondera <- 1.5
+
+      maximo <- max(df$Capacity)
+      minimo <- min(df$Capacity)
+
 
       leaflet(data = df) %>% addTiles() %>%
+        addCircles(~X, ~Y, popup = ~as.character(Venue), fillOpacity = 0.7, radius = ~log(Capacity*10), color = ~factpal(Id)) %>%
+        addHeatmap(
+          lat = ~Y,
+          lng = ~X,
+          intensity = ~Capacity*factor_pondera/(maximo-minimo),
+          radius = 20,
+          blur = 15,
+          maxZoom = 17
+        ) %>%
       #addMarkers(~X, ~Y, popup = ~as.character(Venue)) %>%
-      addCircles(~X, ~Y, popup = ~as.character(Venue), fillOpacity = 0.7, radius = ~log(Capacity*10), color = ~factpal(Id)) %>%
       addLegend("bottomright", pal = factpal, values = ~Id, title = "Apariciones", opacity = 1)
   })
 

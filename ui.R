@@ -1,8 +1,10 @@
 library(shiny)
 library(plotly)
 library(leaflet)
-#devtools::install_github("ropensci/gistr")
+## devtools::install_github("ropensci/gistr")
+## devtools::install_github('rstudio/DT')
 library(gistr)
+
 
 #grupos_disponibles <- read.csv2("grupos_disponibles.csv", header = FALSE, stringsAsFactors = FALSE)
 ## grupos_disponibles <- readLines("https://raw.githubusercontent.com/daquina-io/apariciones_abiertas/master/proyectos_ordenados_desc.txt")
