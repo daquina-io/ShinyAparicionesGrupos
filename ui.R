@@ -32,7 +32,7 @@ shinyUI(fluidPage(
       sidebarPanel(
           fluidRow(
               column(7,
-                     selectizeInput('grupos', 'Seleccione los grupos que quiere analizar', choices = grupos_disponibles, multiple = TRUE )),
+                     selectizeInput('grupos', 'Seleccione los grupos que quiere analizar', choices = grupos_disponibles, multiple = TRUE, selected = "fonseca" )),
               column(1,
                      submitButton("Mostrar información"))
               ),
@@ -41,15 +41,15 @@ shinyUI(fluidPage(
                            p("Planteamos una forma colaborativa de recoger información de la escena musical, inicialmente las apariciones de proyectos musicales usando un repositorio distribuído donde todos podemos aportar; de allí es donde proviene toda la información que vez acá de manera visual."),
                            p("Puedes acceder directamente a la información en el repositorio", a(href="https://github.com/daquina-io/apariciones","https://github.com/daquina-io/apariciones"), "la cual fue creada usando", a(href="http://geojson.io/","http://geojson.io/") ),
                            p("De igual manera puedes ver el código fuente de las visualizaciones disponibles en el panel derecho en el siguiente repositorio", a(href = "https://github.com/daquina-io/visualizacion_apariciones_proyectos_musicales","https://github.com/daquina-io/visualizacion_apariciones_proyectos_musicales")),
-                           p("Nos puedes contactar en el correo electrónico", a(href="mailto:daquinacol@gmail.com?Subject=He%20visto%20la%20visualización%20y%20...","daquinal@gmail.com") )
+                           p("Nos puedes contactar en el correo electrónico", a(href="mailto:daquinacol@gmail.com?Subject=He%20visto%20la%20visualización%20y%20...","daquinacol@gmail.com") )
               ))
           ),
 
       mainPanel(
-          tabsetPanel(
+        tabsetPanel(
+              tabPanel("Mapa", leafletOutput("apariciones_mapa")),
               tabPanel("Gráfico fecha/Capacidad", plotlyOutput("apariciones_bubbles")),
               tabPanel("Gráfico Tendencia fecha/Capacidad", plotOutput("apariciones_tendencia")),
-              tabPanel("Mapa", leafletOutput("apariciones_mapa")),
               tabPanel("Tabla de datos", DT::dataTableOutput("tabla"))
             )
         )
