@@ -19,7 +19,7 @@ source_GitHubData <-function(url, sep = ",", header = TRUE)
   read.table(handle, sep = sep, header = FALSE, stringsAsFactors = FALSE)
 }
 
-grupos_disponibles <- source_GitHubData("https://raw.githubusercontent.com/daquina-io/apariciones_abiertas/master/proyectos_ordenados_desc.txt")
+grupos_disponibles <- source_GitHubData("https://raw.githubusercontent.com/daquina-io/visualizacion_apariciones_proyectos_musicales/master/grupos_disponibles.csv")
 colnames(grupos_disponibles) <- "Agrupaciones"
 
 # Define UI for dataset viewer application
