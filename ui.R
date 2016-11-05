@@ -23,7 +23,7 @@ grupos_disponibles <- source_GitHubData("https://raw.githubusercontent.com/daqui
 colnames(grupos_disponibles) <- "Agrupaciones"
 
 # Define UI for dataset viewer application
-shinyUI(fluidPage(
+ui <- function(request) {fluidPage(
 
   # Application title
   titlePanel("Apariciones de agrupaciones musicales"),
@@ -53,5 +53,7 @@ shinyUI(fluidPage(
               tabPanel("Tabla de datos", DT::dataTableOutput("tabla"))
             )
         )
-      )
-    ))
+  ),
+  bookmarkButton()
+)
+}
