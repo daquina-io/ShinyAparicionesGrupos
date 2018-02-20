@@ -11,6 +11,7 @@ library(ggplot2)
 library(plotly)
 library(lubridate)
 library(leaflet)
+library(leaflet.extras)
 library(RColorBrewer)
 source("./utils.R")
 
@@ -66,8 +67,7 @@ b
           lng = ~X,
           intensity = ~Capacity*factor_pondera/(maximo-minimo),
           radius = 20,
-          blur = 15,
-          maxZoom = 17
+          blur = 15
         ) %>%
       #addMarkers(~X, ~Y, popup = ~as.character(Venue)) %>%
       addLegend("bottomright", pal = factpal, values = ~Id, title = "Apariciones", opacity = 1)
