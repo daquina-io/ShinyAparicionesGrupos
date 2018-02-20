@@ -32,7 +32,7 @@ ui <- function(request) {fluidPage(
       sidebarPanel(
           fluidRow(
               column(7,
-                     selectizeInput('grupos', 'Seleccione los grupos que quiere analizar', choices = grupos_disponibles, multiple = TRUE, selected = "fonseca" )),
+                     selectizeInput('grupos', 'Seleccione los grupos que quiere analizar', choices = grupos_disponibles, multiple = TRUE, selected = "el_suiche" )),
               column(1,
                      submitButton("Mostrar información"))
               ),
